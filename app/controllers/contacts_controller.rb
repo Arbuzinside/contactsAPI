@@ -84,7 +84,7 @@ class ContactsController < ApplicationController
   def authenticate
     @title = "Google Authentication"
 
-    googleauth_url = "http://127.0.0.1:3000/users/authorization/callback"
+    googleauth_url = "http://mccgroup24.ddns.net:8080/users/authorization/callback"
     client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
     google_root_url = "https://accounts.google.com/o/oauth2/auth?state=profile&redirect_uri="+googleauth_url+"&response_type=code&client_id="+client_id.to_s+"&approval_prompt=force&scope=https://www.google.com/m8/feeds/"
     redirect_to google_root_url
@@ -94,7 +94,7 @@ class ContactsController < ApplicationController
   def authorise
     begin
       @title = "Google Authetication"
-      googleauth_url = "http://127.0.0.1:3000/users/authorization/callback"
+      googleauth_url = "http://mccgroup24.ddns.net:8080/users/authorization/callback"
       token = params[:code]
       client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
       client_secret = "-qIWTSBbMj-ZofgliJbNqk_1"
