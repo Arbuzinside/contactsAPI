@@ -81,23 +81,10 @@ class ContactsController < ApplicationController
     end
   end
 
-
-
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contact
-      @contact = Contact.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def contact_params
-      params.require(:contact).permit(:name, :address, :surname, :email, :phone, :birthday, :notes)
-    end
-
   def authenticate
-    @title = "Google Authetication"
+    @title = "Google Authentication"
 
+    googleauth_url = "http://127.0.0.1:3000/users/authorization/callback"
     client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
     google_root_url = "https://accounts.google.com/o/oauth2/auth?state=profile&redirect_uri="+googleauth_url+"&response_type=code&client_id="+client_id.to_s+"&approval_prompt=force&scope=https://www.google.com/m8/feeds/"
     redirect_to google_root_url
@@ -107,6 +94,7 @@ class ContactsController < ApplicationController
   def authorise
     begin
       @title = "Google Authetication"
+      googleauth_url = "http://127.0.0.1:3000/users/authorization/callback"
       token = params[:code]
       client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
       client_secret = "-qIWTSBbMj-ZofgliJbNqk_1"
@@ -135,7 +123,7 @@ class ContactsController < ApplicationController
         name = contact['title']['$t']
         contact['gd$email'].to_a.each do |email|
           email_address = email['address']
-          @contact = Contact.new(:name => name, :email => email_address)  # for testing i m pushing it into database..
+          Contact.create(:name => name, :email => email_address)  # for testing i m pushing it into database..
         end
 
       end
@@ -146,6 +134,20 @@ class ContactsController < ApplicationController
 
 
   end
+
+
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_contact
+      @contact = Contact.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def contact_params
+      params.require(:contact).permit(:name, :address, :surname, :email, :phone, :birthday, :notes)
+    end
+
 
 
 

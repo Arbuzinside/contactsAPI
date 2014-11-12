@@ -42,4 +42,4 @@
 <br>
 
 <%= link_to 'New Contact', new_contact_path %>
-<%= link_to 'Get Google Contacts', method: :authorise  %>
+<%= link_to 'Get Google Contacts', :controller => 'contacts', :action => 'authenticate'  %>
