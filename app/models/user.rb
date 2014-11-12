@@ -15,6 +15,7 @@ class User
   field :encrypted_password, type: String, default: ""
   field :provider,            type: String, default: ""
   field :uid,                  type: String, default: ""
+  field :access_token,           type: String, default: ""
 
   ## Recoverable
   field :reset_password_token,   type: String
@@ -38,6 +39,7 @@ class User
     data = access_token.info
     user = User.where(:provider => access_token.provider, :uid => access_token.uid ).first
     if user
+      user.update_attribute(:access_token, access_token.credentials.token)
       return user
     else
       registered_user = User.where(:email => access_token.info.email).first
@@ -49,6 +51,7 @@ class User
                            email: data["email"],
                            uid: access_token.uid ,
                            password: Devise.friendly_token[0,20],
+                           access_token: access_token.credentials.token
         )
       end
     end

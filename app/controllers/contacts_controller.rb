@@ -81,48 +81,12 @@ class ContactsController < ApplicationController
     end
   end
 
-
-
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contact
-      @contact = Contact.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def contact_params
-      params.require(:contact).permit(:name, :address, :surname, :email, :phone, :birthday, :notes)
-    end
-
-  def authenticate
-    @title = "Google Authetication"
-
-    client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
-    google_root_url = "https://accounts.google.com/o/oauth2/auth?state=profile&redirect_uri="+googleauth_url+"&response_type=code&client_id="+client_id.to_s+"&approval_prompt=force&scope=https://www.google.com/m8/feeds/"
-    redirect_to google_root_url
-  end
-
   # GET /contacts/google
-  def authorise
+  def get_google
     begin
       @title = "Google Authetication"
-      token = params[:code]
-      client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
-      client_secret = "-qIWTSBbMj-ZofgliJbNqk_1"
-      uri = URI('https://accounts.google.com/o/oauth2/token')
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request = Net::HTTP::Post.new(uri.request_uri)
 
-      request.set_form_data('code' => token, 'client_id' => client_id, 'client_secret' => client_secret, 'redirect_uri' => googleauth_url, 'grant_type' => 'authorization_code')
-      request.content_type = 'application/x-www-form-urlencoded'
-      response = http.request(request)
-      response.code
-      access_keys = ActiveSupport::JSON.decode(response.body)
-
-      uri = URI.parse("https://www.google.com/m8/feeds/contacts/default/full?oauth_token="+access_keys['access_token'].to_s+"&max-results=50000&alt=json")
+      uri = URI.parse("https://www.google.com/m8/feeds/contacts/default/full?oauth_token="+current_user[:access_token]+"&max-results=50000&alt=json")
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
@@ -148,5 +112,23 @@ class ContactsController < ApplicationController
   end
 
 
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_contact
+      @contact = Contact.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def contact_params
+      params.require(:contact).permit(:name, :address, :surname, :email, :phone, :birthday, :notes)
+    end
+
+    def authenticate
+      @title = "Google Authetication"
+
+      client_id = "178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com"
+      google_root_url = "https://accounts.google.com/o/oauth2/auth?state=profile&redirect_uri="+googleauth_url+"&response_type=code&client_id="+client_id.to_s+"&approval_prompt=force&scope=https://www.google.com/m8/feeds/"
+      redirect_to google_root_url
+    end
 
 end

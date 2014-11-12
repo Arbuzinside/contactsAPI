@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
+
+  get 'contacts/get_google' => 'contacts#get_google', :as => :get_google
+
   resources :contacts
 
 

@@ -24,7 +24,7 @@ Devise.setup do |config|
 
 
 
-  config.omniauth :google_oauth2, '178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com', '-qIWTSBbMj-ZofgliJbNqk_1'
+  config.omniauth :google_oauth2, '178637155283-a02oh0ufr9c7arkug3rj946s48mlh90p.apps.googleusercontent.com', '-qIWTSBbMj-ZofgliJbNqk_1', {:client_options => {:ssl => {:verify => false}}}
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
   # just :email. You can configure it to use [:username, :subdomain], so for

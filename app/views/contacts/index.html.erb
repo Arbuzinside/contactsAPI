@@ -3,7 +3,6 @@
     <%= submit_tag "Search", :name => nil %>
 <% end %>
 
-
 <h1>Listing contacts</h1>
 
 
@@ -42,4 +41,4 @@
 <br>
 
 <%= link_to 'New Contact', new_contact_path %>
-<%= link_to 'Get Google Contacts', method: :authorise  %>
+<%= link_to 'Get Google Contacts', :controller => 'contacts', :action => 'authentificate'  %>
