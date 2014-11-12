@@ -119,11 +119,15 @@ class ContactsController < ApplicationController
       response = http.request(request)
       contacts = ActiveSupport::JSON.decode(response.body)
       contacts['feed']['entry'].each_with_index do |contact,index|
-
+        local_contacts = Contact.all
         name = contact['title']['$t']
         contact['gd$email'].to_a.each do |email|
           email_address = email['address']
-          Contact.create(:name => name, :email => email_address)  # for testing i m pushing it into database..
+          repeat = local_contacts.any_of({:name => name},{:email => email_address})
+          length = repeat.to_a.length
+          if (repeat.to_a.length == 0) #do not create it if it already exists
+            Contact.create(:name => name, :email => email_address)  # for testing i m pushing it into database..
+          end
         end
 
       end
